@@ -16,7 +16,7 @@ public class UserService {
     UserRepository userRepository;
 
     public String findUserName(String userName){
-        Optional<User> obj = userRepository.findByUsername(userName);
+        Optional<User> obj = userRepository.findByUserName(userName);
         if(obj.isPresent()){
             return obj.get().getUsername();
         } else
