@@ -1,11 +1,11 @@
 #spring.application.name=security
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/sec_jwt
+    url: jdbc:postgresql://localhost:5432/security
     hikari:
       #jdbc-url: jdbc:postgresql://localhost:5432/sec_jwt
-      username: mohsen
-      password: mohsen
+      username: postgres
+      password: 123
       driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -18,7 +18,7 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
 server:
-  port: 8080
+  port: 47
 logging:
   level:
     root: error

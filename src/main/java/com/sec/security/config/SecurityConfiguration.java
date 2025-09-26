@@ -17,7 +17,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
-    public static final String[] WHITE_LIST_URL = {"/api/auth/**",
+    public static final String[] WHITE_LIST_URL = {
+            "/api/unsecure/**",
+            "/api/auth/**",
             "/swagger-resources",
             "/swagger-resources/**",
             "/configuration/ui",
@@ -36,8 +38,6 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(
                         req ->
                                 req.requestMatchers(WHITE_LIST_URL)
-                                        .permitAll()
-                                        .requestMatchers("")
                                         .permitAll()
                                         .anyRequest()
                                         .authenticated())
