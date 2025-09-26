@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
 public class UserDataController {
-    UserService userService;
+    private final UserService userService;
 
     @GetMapping("/{userName}")
     public ResponseEntity<UserDataResponse> getUserData(@PathVariable String userName) {

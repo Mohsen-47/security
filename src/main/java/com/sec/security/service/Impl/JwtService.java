@@ -56,7 +56,7 @@ public class JwtService {
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))// creation date of the token
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 2)) // two hour exp date
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24)) // two hour exp date
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)// secret key + algorithm
                 .compact(); // close the building process(.build();)
     }

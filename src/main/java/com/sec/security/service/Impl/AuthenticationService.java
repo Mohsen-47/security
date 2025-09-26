@@ -30,7 +30,7 @@ public class AuthenticationService {
     public AuthenticationResponse register(RegisterRequest request) {
         Optional<User> userExists = userRepository.findByUserName(request.email());
         if (userExists.isPresent()) {
-            throw new SecurityException("User already exists");
+            throw new SecurityException("User already exists");//todo: custom exception
         }
         User newUser = User.builder()
                 .role(Role.User)

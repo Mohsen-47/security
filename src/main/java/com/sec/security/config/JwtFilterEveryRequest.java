@@ -18,12 +18,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @Component
-@RequiredArgsConstructor //this if we declare a final field in this class
-// this @ will create a constructor with the final field
 @AllArgsConstructor
 public class JwtFilterEveryRequest extends OncePerRequestFilter {
-    private JwtService jwtService;
-    private UserDetailsService userDetailsService;
+    private final JwtService jwtService;
+    private final UserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
@@ -41,7 +39,7 @@ public class JwtFilterEveryRequest extends OncePerRequestFilter {
         userNameFromToken = jwtService.extractUserName(tokenJwt); //extracting username from raw token
         if (userNameFromToken != null || SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(userNameFromToken);
-            if (jwtService.isTokenValid(userNameFromToken, userDetails)) {
+            if (jwtService.isTokenValid(tokenJwt, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(
                                 userDetails,

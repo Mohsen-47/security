@@ -21,6 +21,6 @@ server:
   port: 47
 logging:
   level:
-    root: error
+    root: debug
     sql: trace
-    web: error
+    web: debug
