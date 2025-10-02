@@ -18,10 +18,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Application_User")
-public class User implements UserDetails {
-
-
+public class User {
     @Id
     @GeneratedValue()
     Long id;
@@ -32,40 +29,6 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     Role role;
 
-    //user details methods ------- spring security
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
-    }
-
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return userName;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+    //user details methods from spring security:
+    //decoupled by userDetail class
 }

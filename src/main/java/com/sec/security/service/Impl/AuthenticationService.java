@@ -2,6 +2,7 @@ package com.sec.security.service.Impl;
 
 import com.sec.security.model.Role;
 import com.sec.security.model.User;
+import com.sec.security.model.dto.UserDetail;
 import com.sec.security.model.dto.requests.AuthenticateRequest;
 import com.sec.security.model.dto.requests.RegisterRequest;
 import com.sec.security.model.dto.response.AuthenticationResponse;
@@ -40,24 +41,27 @@ public class AuthenticationService {
                 .creationDate(LocalDate.now())
                 .build();
         userRepository.save(newUser);
-        String token = jwtService.generateTokenNoClaims(newUser);
+        UserDetail userDetail = UserDetail.buildFromUser(newUser);
+        String token = jwtService.generateTokenNoClaims(userDetail);
         return AuthenticationResponse.builder()
                 .token(token)
                 .build();
     }
 
     public AuthenticationResponse authenticate(AuthenticateRequest request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.email(), request.password()));
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.username(), request.password()));
         // if code reaches here it means that the user completely authenticated!
         // otherwise an exception is thrown!
-        Optional<User> user =
-                Optional.ofNullable(userRepository.findByUserName(request.email()).orElseThrow(
-                        () -> new UsernameNotFoundException("User not found")));
+        Optional<User> user = userRepository.findByUserName(request.username());
+        if (user.isPresent()) {
+            UserDetail userDetail = UserDetail.buildFromUser(user.get());
+            String token = jwtService.generateTokenNoClaims(userDetail);
+            return AuthenticationResponse.builder()
+                    .token(token)
+                    .build();
+        } else
+            throw new UsernameNotFoundException("User not found!");
 
-        String token = jwtService.generateTokenNoClaims(user.get());
-        return AuthenticationResponse.builder()
-                .token(token)
-                .build();
     }
 
 }

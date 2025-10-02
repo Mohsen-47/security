@@ -1,5 +1,7 @@
 package com.sec.security.config;
 
+import com.sec.security.model.User;
+import com.sec.security.model.dto.UserDetail;
 import com.sec.security.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +15,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Configuration
 @Service
@@ -29,7 +33,12 @@ public class ApplicationConfig {
         return new UserDetailsService() {
             @Override
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                return userRepository.findByUserName(username).orElseThrow(() -> new UsernameNotFoundException("user does not exist"));
+
+                Optional<User> user = userRepository.findByUserName(username);
+                if (user.isPresent()) {
+                    return UserDetail.buildFromUser(user.get());
+                }
+                throw new UsernameNotFoundException("user does not exist");
             }
         };
     }

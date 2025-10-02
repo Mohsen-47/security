@@ -1,6 +1,7 @@
 package com.sec.security.service.Impl;
 
 import com.sec.security.model.User;
+import com.sec.security.model.dto.UserDetail;
 import com.sec.security.model.dto.requests.ChangePasswordRequest;
 import com.sec.security.model.dto.response.UserDataResponse;
 import com.sec.security.repository.UserRepository;
@@ -24,24 +25,19 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     PasswordEncoder passwordEncoder;
 
-    @Override
-    public String findUserName(String userName) {
-        Optional<User> obj = userRepository.findByUserName(userName);
-        if (obj.isPresent()) {
-            return obj.get().getUsername();
-        } else
-            throw new SecurityException("user does not exist!");//todo: custom exception
-    }
 
     @Override
     public UserDataResponse getUserData(String userName) {
         Optional<User> obj = userRepository.findByUserName(userName);
-        return obj.map(user ->
-                UserDataResponse.builder()
-                        .fullName(user.getFullName())
-                        .role(user.getRole().name())
-                        .build()).orElse(null);
-        //throw new SecurityException("user does not exist!");
+        if (obj.isPresent()) {
+            UserDetail user = UserDetail.buildFromUser(obj.get());
+            return UserDataResponse.builder()
+                            .fullName(user.getFullName())
+                            .role(user.getRole().name())
+                            .build();
+        }
+        //throw new SecurityException("user does not exist!");//todo: custom exception
+        return null;
     }
 
     @Override
